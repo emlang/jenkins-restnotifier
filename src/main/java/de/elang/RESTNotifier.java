@@ -21,6 +21,7 @@ import org.kohsuke.stapler.StaplerRequest;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 public class RESTNotifier extends Notifier {
@@ -62,7 +63,9 @@ public class RESTNotifier extends Notifier {
         try {
             resource.get(String.class);
         } catch (ClientHandlerException e) {
-            LOGGER.warn("Could not notify to URL: " + startedURL);
+            LOGGER.warn("Could not notify to URL: " + startedURL, e);
+        } catch (UniformInterfaceException e) {
+            LOGGER.warn("Could not notify to URL: " + startedURL, e);
         }
         return true;
     }
@@ -133,7 +136,6 @@ public class RESTNotifier extends Notifier {
         public String getDisplayName() {
             return "REST Notifier";
         }
-
     }
 
 }
